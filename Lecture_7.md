@@ -14,7 +14,7 @@ done
 bwa index bbc.fasta
 ```
 
-## bwa mem
+## bwa mem mapping the reads
 
 ```
 for i in *lite.trim.1_1.fastq
@@ -24,7 +24,7 @@ bwa mem -t 10 bbc.fasta $OUT.lite.trim.1_1.fastq $OUT.lite.trim.1_2.fastq > $OUT
 done
 ```
 
-## samtools view
+## samtools view converting file.sam to file.bam
 
 ```
 for i in *.sam
@@ -34,7 +34,7 @@ samtools view -b $OUT.sam -o $OUT.bam
 done
 ```
 
-## samtools stort
+## samtools sort 
 
 ```
 for i in *.bam
