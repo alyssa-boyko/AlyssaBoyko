@@ -2,9 +2,7 @@
 
 ```
 conda activate bio_env
-```
 
-```
 bcftools query -l body_size.vcf
 ```
 
@@ -12,9 +10,7 @@ bcftools query -l body_size.vcf
 
 ```
 bgzip body_size.vcf
-```
 
-```
 bcftools index body_size.vcf.gz
 ```
 
@@ -39,8 +35,34 @@ SRR31835573.sorted.bam
 
 ```
 bcftools view -S group1.txt body_size.vcf.gz -Oz -o group1.vcf.gz
+
+bcftools view -S group2.txt body_size.vcf.gz -Oz -o group2.vcf.gz
 ```
 
+## Filter each group's VCF to strictly biallelic SNPs first
+
 ```
-bcftools view -S group2.txt body_size.vcf.gz -Oz -o group2.vcf.gz
+bcftools view -m2 -M2 -v snps group1.vcf.gz -Oz -o group1_biallelic.vcf.gz
+
+bcftools view -m2 -M2 -v snps group2.vcf.gz -Oz -o group2_biallelic.vcf.gz
+```
+
+## Calculate allele frequency within each group
+
+```
+bcftools +fill-tags group1_biallelic.vcf.gz -Oz -o group1_af.vcf.gz -- -t AF
+
+bcftools +fill-tags group2_biallelic.vcf.gz -Oz -o group2_af.vcf.gz -- -t AF
+```
+
+## Pull out just CHROM, POS, and AF
+
+```
+bcftools query -f '%CHROM\t%POS\t%INFO/AF\n' group1_af.vcf.gz > group1_af.tsv
+
+bcftools query -f '%CHROM\t%POS\t%INFO/AF\n' group2_af.vcf.gz > group2_af.tsv
+```
+
+## Merge, compute the difference, and plot in R
+
 ```
