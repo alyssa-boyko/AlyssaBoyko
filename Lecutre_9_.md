@@ -60,6 +60,9 @@ bcftools query -f '%CHROM\t%POS\t%INFO/AF\n' group2_af.vcf.gz > group2_af.tsv
 ## Merge, compute the difference, and plot in R
 
 ```
+R
+
+# This creates names for the columns, c denotes a list
 g1 <- read.table("group1_af.tsv", col.names = c("CHROM", "POS", "AF1"))
 g2 <- read.table("group2_af.tsv", col.names = c("CHROM", "POS", "AF2"))
 
@@ -76,6 +79,7 @@ merged$AF_diff <- merged$AF1 - merged$AF2
 # make a plot of allele frequency differences
 pdf('merged.pdf')
 
+# Always list in x,y order and label your plot and axes
 plot(merged$POS, merged$AF_diff,
      pch = 19, col = "steelblue",
      xlab = "Position in gene", ylab = "Allele frequency difference (Group1 - Group2)",
@@ -85,3 +89,10 @@ abline(h = 0, lty = 2, col = "grey40")
 dev.off()
 ```
 
+## Download your plot
+
+# You should be working in your computer's terminal, not in the class server
+
+scp -r visitor@134.129.113.23:/storehouse/visitor/table_/pigmentation/merged.pdf .
+
+# Type open when you download it
